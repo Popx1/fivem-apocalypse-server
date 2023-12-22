@@ -1,0 +1,100 @@
+name: Zombie Apocalypse Server
+version: v1.0
+author: Lahcen
+description: Zombie Apocalypse server built by Lahcen
+
+# Meta Data
+$engine: 3
+$onesync: on
+
+# Context Variables
+variables:
+  serverName: "Zombie Apocalypse Server"
+  txAdminPassword: "lahcen"
+  onesync_enabled: true
+  maxClients: 32
+  description: "Welcome to the Zombie Apocalypse Server!"
+
+# Resources Configuration
+resources:
+  - name: standalone-zombie-system
+    source: https://github.com/WeponzTV/Standalone-Zombie-System
+    branch: main
+    action: ensure
+
+# Server Information
+information:
+  language: "en"
+  map: "Apocalypse map"
+  gametype: "rolaplay"
+  loginTheme: "dark"
+
+# Timezone Configuration
+timezone: "UTC"
+
+# Tasks
+tasks:
+  - action: download_github
+    src: https://github.com/citizenfx/cfx-server-data
+    ref: master
+    subpath: resources
+    dest: ./resources
+
+  - action: download_file
+    url: "https://raw.githubusercontent.com/Popx1/fivem-apocalypse-server/main/server.cfg"
+    path: ./server.cfg
+
+  - action: download_github
+    src: https://github.com/Bob74/bob74_ipl
+    ref: master
+    dest: ./resources/[standalone]/bob74_ipl
+
+  - action: download_github
+    src: https://github.com/TomGrobbe/vMenu
+    ref: main
+    dest: ./tmp/resources/vMenu
+
+  - action: move_path
+    src: ./tmp/resources/vMenu/vMenu
+    dest: ./resources/vMenu/
+
+  - action: waste_time  # prevent github throttling
+    seconds: 5
+
+  - action: download_github
+    src: https://github.com/AvarianKnight/pma-voice
+    ref: main
+    dest: ./resources/[standalone]/pma-voice
+
+  - action: query_database
+    file: ./tmp/core/[SQL]/legacy.sql
+
+  - action: download_file
+    path: ./tmp/files/oxmysql.zip
+    url: https://github.com/overextended/oxmysql/releases/latest/download/oxmysql.zip
+
+  - action: unzip
+    dest: ./resources/[standalone]
+    src: ./tmp/files/oxmysql.zip
+
+  - action: download_github
+    src: https://github.com/TotalScripts/Total-Apocalypse
+    ref: main
+    subpath: pack1
+    dest: ./tmp/resources/total-apocalypse
+
+  - action: move_path
+    src: ./tmp/resources/total-apocalypse/pack1
+    dest: ./resources/[total-apocalypse]/pack1
+
+  - action: move_path
+    src: ./tmp/resources/total-apocalypse/pack2
+    dest: ./resources/[total-apocalypse]/pack2
+
+  - action: move_path
+    src: ./tmp/resources/total-apocalypse/pack3
+    dest: ./resources/[total-apocalypse]/pack3
+
+  - action: move_path
+    src: ./tmp/resources/total-apocalypse/postapo-interior
+    dest: ./resources/[total-apocalypse]/postapo-interior
